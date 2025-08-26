@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Currency & Cake Bill Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #FEE6F1; /* soft pink-lavender background */
+      padding: 40px;
+      text-align: center;
+    }
+    .box {
+      background: #F8F8FF; /* ghost white with soft lavender */
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 6px 12px rgba(128, 0, 128, 0.2);
+      width: 400px;
+      margin: 30px auto;
+      border: 2px solid #9370DB;
+    }
+    h2 {
+      color: #6A5ACD; /* slate blue */
+      margin-bottom: 20px;
+    }
+    select, input {
+      padding: 8px;
+      margin: 8px;
+      border-radius: 8px;
+      border: 1px solid #9370DB;
+      outline: none;
+      width: 90%;
+    }
+    button {
+      padding: 10px 20px;
+      background: #9370DB;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      margin-top: 10px;
+    }
+    button:hover {
+      background: #6A5ACD;
+    }
+    .result {
+      margin-top: 15px;
+      font-weight: bold;
+      color: #4B0082; /* indigo */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Currency Converter -->
+  <div class="box">
+    <h2>💜 Currency Converter</h2>
+    <label>Amount:</label>
+    <input type="number" id="amount" placeholder="Enter amount"><br>
+
+    <label>From:</label>
+    <select id="from">
+      <option value="INR">INR</option>
+      <option value="USD">USD</option>
+      <option value="EUR">EUR</option>
+      <option value="JPY">JPY</option>
+    </select>
+
+    <label>To:</label>
+    <select id="to">
+      <option value="USD">USD</option>
+      <option value="INR">INR</option>
+      <option value="EUR">EUR</option>
+      <option value="JPY">JPY</option>
+    </select><br>
+
+    <button onclick="convert()">Convert</button>
+    <div class="result" id="currencyResult"></div>
+  </div>
+
+  <!-- Cake Order Bill Calculator -->
+  <div class="box">
+    <h2>🎂 Cake Order Bill Calculator</h2>
+    <label>Select Item:</label>
+    <select id="cakeType">
+      <optgroup label="Cakes">
+        <option value="400">Vanilla - ₹400</option>
+        <option value="500">Chocolate - ₹500</option>
+        <option value="450">Strawberry - ₹450</option>
+        <option value="600">Black Forest - ₹600</option>
+        <option value="550">Blueberry - ₹550</option>
+        <option value="650">Rasamalai - ₹650</option>
+        <option value="700">Triple Chocolate - ₹700</option>
+        <option value="750">Chocolate Truffle - ₹750</option>
+        <option value="800">Ferrero Rocher - ₹800</option>
+      </optgroup>
+      <optgroup label="Brownies">
+        <option value="250">Regular Brownie - ₹250</option>
+        <option value="300">Sziller Brownie - ₹300</option>
+        <option value="350">Pista Brownie - ₹350</option>
+        <option value="400">Biscoff Brownie - ₹400</option>
+        <option value="450">Nutella Brownie - ₹450</option>
+        <option value="300">Choco Chip Brownie - ₹300</option>
+        <option value="400">Nuts Brownie - ₹400</option>
+      </optgroup>
+      <optgroup label="Pastries">
+        <option value="150">Chocolate Pastry - ₹150</option>
+        <option value="130">Vanilla Pastry - ₹130</option>
+        <option value="140">Strawberry Pastry - ₹140</option>
+        <option value="160">Blueberry Pastry - ₹160</option>
+        <option value="180">Rasmalai Pastry - ₹180</option>
+      </optgroup>
+      <optgroup label="Baked Savories">
+        <option value="100">Veg Puff - ₹100</option>
+        <option value="120">Cheese Croissant - ₹120</option>
+        <option value="150">Chicken Roll - ₹150</option>
+        <option value="130">Samosa - ₹130</option>
+        <option value="140">Paneer Puff - ₹140</option>
+      </optgroup>
+    </select><br>
+
+    <label>Quantity:</label>
+    <input type="number" id="qty" value="1" min="1"><br>
+
+    <label>Extra Decoration (₹100):</label>
+    <input type="checkbox" id="decoration"><br>
+
+    <button onclick="calculateBill()">Calculate Bill</button>
+    <div class="result" id="billResult"></div>
+  </div>
+
+  <script>
+    // Currency Converter
+    function convert() {
+      let amount = parseFloat(document.getElementById("amount").value);
+      let from = document.getElementById("from").value;
+      let to = document.getElementById("to").value;
+
+      let rates = {
+        "INR": 1,
+        "USD": 0.012,
+        "EUR": 0.011,
+        "JPY": 1.70
+      };
+
+      if (isNaN(amount)) {
+        document.getElementById("currencyResult").innerText = "⚠️ Please enter a valid amount.";
+        return;
+      }
+
+      let inrValue = amount / rates[from]; 
+      let converted = inrValue * rates[to];
+
+      document.getElementById("currencyResult").innerText =
+        amount + " " + from + " = " + converted.toFixed(2) + " " + to;
+    }
+
+    // Cake Order Bill Calculator
+    function calculateBill() {
+      let cakePrice = parseInt(document.getElementById("cakeType").value);
+      let qty = parseInt(document.getElementById("qty").value);
+      let decoration = document.getElementById("decoration").checked ? 100 : 0;
+
+      if (qty < 1 || isNaN(qty)) {
+        document.getElementById("billResult").innerText = "⚠️ Enter valid quantity!";
+        return;
+      }
+
+      let total = (cakePrice * qty) + decoration;
+      document.getElementById("billResult").innerText =
+        "Total Bill: ₹" + total;
+    }
+  </script>
+</body>
+</html>
